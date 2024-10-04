@@ -42,7 +42,7 @@ Từ kết quả tương quan giữa các biến thông số kỹ thuật và gi
 ![Content-based Filtering](https://github.com/user-attachments/assets/cb5bde19-f8c3-49d6-a036-5f1d1d995e66)
 
 - Xác định các thuộc tính đầu vào: Đảm bảo hệ thống có thể đáp ứng mọi nhu cầu và sở thích của người dùng một cách toàn diện và đa dạng.
-- Chuyern hóa vector TF-IDF: Mỗi sản phẩm sẽ được biểu diễn bởi một vector duy nhất, trong đó mỗi chiều của vector đại diện cho một thuộc tính đã được trích chọn. Điều này giúp chúng ta có thể so sánh và tính toán độ tương đồng giữa các sản phẩm dựa trên biểu diễn vector hóa của chúng.
+- Chuyển hóa vector TF-IDF: Mỗi sản phẩm sẽ được biểu diễn bởi một vector duy nhất, trong đó mỗi chiều của vector đại diện cho một thuộc tính đã được trích chọn. Điều này giúp chúng ta có thể so sánh và tính toán độ tương đồng giữa các sản phẩm dựa trên biểu diễn vector hóa của chúng.
 - Tính toán độ tương đồng Cosine: Qua quá trình tính toán, ta sẽ tìm ra được các sản phẩm có mức độ tương đồng cao nhất với yêu cầu của người dùng, là những sản phẩm có điểm gần giá trị 1 nhất.
 
 ![Cách thức hoạt động](https://github.com/user-attachments/assets/efa77dc5-9dfe-4baf-9cd7-00777c2d695e)
