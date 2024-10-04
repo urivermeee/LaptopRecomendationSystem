@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Laptop Recommandation System</title>
+    <!-- <link rel="stylesheet" href="style.css" type="text/css"/> -->
+	<style>
+        body {
+            /* background-image: url('https://up-anh.vi-vn.vn/img/1713445939_15007cc62ce891b9bd6843cc57ea2d7b.png'); */
+            background-image: url('https://i.gifer.com/3OlC7.gif');
+            background-repeat: repeat;
+			background-size: 100vw ;
+        }
+
+        #eJOY__extension_ai_adv_root,
+        #eJOY__extension_ai_adv_root * {
+            display: none !important;
+        }
+
+        /* Ẩn các phần tử có lớp corom-element */
+        .corom-element {
+            display: none !important;
+        }
+        
+		h2 {
+		font-size: 60px;
+		text-align: center;
+        margin-bottom: 20px;
+		}
+
+		input[type=text], select {
+			width: 100%;
+			padding: 5px 10px;
+			margin: 10px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+
+		input[type=submit] {
+            background-color: #ea5e3b;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: none; /* Thay đổi từ float: right; thành float: none; hoặc loại bỏ hoàn toàn */
+        }
+        input[type=submit]:hover {
+            background-color: #cd411d; 
+        }
+
+        div {
+            position: relative; 
+            display: block; /* Thay đổi từ display: inline-block; thành display: block; */
+            margin: 0 auto;
+            max-width: 500px;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+	</style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		
+        $(document).ready(function() {
+            // Xử lý sự kiện khi chọn hãng laptop
+            $('#brand').change(function() {
+                var selectedBrand = $(this).val();
+                // Xóa tất cả các option hiện tại trong select CPU và sau đó thêm một option mới
+                $('#cpu').children().remove();
+                addPlaceholderOptionForCPU();
+                filterCPUByBrand(selectedBrand);
+            });
+
+            function addPlaceholderOptionForCPU() {
+                var select = document.getElementById('cpu');
+                var labelFor = document.querySelector('label[for="cpu"]');
+                var labelText = labelFor.textContent.trim();
+                
+                // Tạo một option mới
+                var placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = labelText.replace(':','');
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+
+                // Thêm option vào đầu tiên của select
+                select.insertBefore(placeholderOption, select.firstChild);
+            }
+
+            function filterCPUByBrand(brand) {
+                // Lấy danh sách các cpu của hãng được chọn
+                var cpus = cpuData[brand];
+                // Thêm option mới vào select cpu dựa trên danh sách các cpu của hãng được chọn
+                $.each(cpus, function(index, value) {
+                    $('#cpu').append('<option value="' + value + '">' + value + '</option>');
+                });
+            }
+
+			// Dữ liệu về các cpu theo hãng
+			var cpuData = {
+                'Apple' : ['Apple M1 Series', 'Apple M2 Series', 'Apple M3 Series'],
+                'Acer' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'Asus' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'Dell' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'HP' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'Lenovo' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'MSI' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'LG' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'Microsoft' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'Gigabyte' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'VAIO' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'Masstel' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ],
+				'Huawei' : ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Intel Ultra Series', 'Intel Celeron', 'AMD Ryzen 3', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9' ]
+			};
+		});
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lặp qua tất cả các thẻ select
+            var selects = document.querySelectorAll('select');
+            selects.forEach(function(select) {
+                var labelFor = document.querySelector('label[for="' + select.id + '"]');
+                var labelText = labelFor.textContent.trim();
+                
+                // Tạo một option mới
+                var placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.text = labelText.replace(':','');
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+
+                // Thêm option vào đầu tiên của select
+                select.insertBefore(placeholderOption, select.firstChild);
+
+                // Xử lý sự kiện khi người dùng chọn
+                select.addEventListener('change', function() {
+                    if (this.value !== '') {
+                        this.firstElementChild.style.display = 'none';
+                    } else {
+                        this.firstElementChild.style.display = 'block';
+                    }
+                });
+
+                // Xử lý sự kiện khi người dùng click vào select
+                select.addEventListener('click', function() {
+                    this.firstElementChild.style.display = 'none';
+                });
+            });
+        });
+	</script>
+</head>
+<body>
+	<h2>HỆ THỐNG ĐỀ XUẤT LAPTOP</h2>
+	<div>
+		<form method="post" action="/laptop_recommender">
+            <label for="propose">Nhu cầu sử dụng:</label>
+			<select id="propose" name="propose">
+                <option value="Văn phòng, Học tập">Văn phòng, Học tập</option>
+                <option value="Gaming, Đồ họa - Kỹ thuật">Gaming, Đồ họa - Kỹ thuật</option>
+                <option value="MacBook">MacBook</option>
+                <option value="Mỏng nhẹ">Mỏng nhẹ</option>
+			</select>
+
+            <label for="price">Giá:</label>
+			<select id="price" name="price">
+                ['Dưới 10 triệu', 'Từ 10 - 15 triệu', 'Từ 15 - 20 triệu', 'Từ 20 - 25 triệu', 'Từ 25 - 30 triệu', 'Trên 30 triệu']
+                <option value="Dưới 10 triệu">Dưới 10 triệu</option>
+                <option value="Từ 10 - 15 triệu">Từ 10 - 15 triệu</option>
+                <option value="Từ 15 - 20 triệu">Từ 15 - 20 triệu</option>
+                <option value="Từ 20 - 25 triệu">Từ 20 - 25 triệu</option>
+                <option value="Trên 30 triệu">Trên 30 triệu</option>
+			</select>
+
+			<label for="brand">Hãng:</label>
+			<select id="brand" name="brand">
+                <option value="Acer">Acer</option>
+                <option value="Asus">Asus</option>
+                <option value="Dell">Dell</option>
+                <option value="Lenovo">Lenovo</option>
+                <option value="Apple">Apple</option>
+                <option value="HP">HP</option>
+                <option value="Gigabyte">Gigabyte</option>
+                <option value="MSI">MSI</option>
+                <option value="Huawei">Huawei</option>
+                <option value="LG">LG</option>
+                <option value="Microsoft">Microsoft</option>
+                <option value="VAIO">VAIO</option>
+                <option value="Masstel">Masstel</option>
+			</select>
+
+			<label for="size">Kích cỡ:</label>
+			<select id="size" name="size">
+                <option value="Nhỏ ~ 13 inch">Nhỏ ~ 13 inch</option>
+                <option value="Vừa ~ 15.6 inch">Vừa ~ 15.6 inch</option>
+                <option value="Lớn ~ 17 inch">Lớn ~ 17 inch</option>
+			</select>
+
+			<label for="color">Màu sắc:</label>
+            <select id="color" name="color">
+                <option value="Bạc">Bạc</option>
+                <option value="Đen">Đen</option>
+                <option value="Xám">Xám</option>
+                <option value="Xanh">Xanh</option>
+                <option value="Vàng">Vàng</option>
+                <option value="Trắng">Trắng</option>
+            </select>
+
+            <label for="weight">Trọng lượng:</label>
+			<input type="text" id="weight" name="weight" placeholder="Trọng lượng (kg)">
+
+			<label for="material">Chất liệu:</label>
+            <select id="material" name="material">
+                <!-- <option value="">Chọn chất liệu</option> -->
+                <option value="Nhựa">Nhựa</option>
+                <option value="Kim loại">Kim loại</option>
+                <option value="Nhựa & Kim loại">Nhựa & Kim loại</option>
+            </select>
+
+            <label for="cpu">CPU:</label>
+            <select id="cpu" name="cpu">
+                <option value="Intel Core i3">Intel Core i3</option>
+                <option value="Intel Core i5">Intel Core i5</option>
+                <option value="Intel Core i7">Intel Core i7</option>
+                <option value="Intel Core i9">Intel Core i9</option>
+                <option value="Intel Ultra Series">Intel Ultra Series</option>
+                <option value="Intel Celeron">Intel Celeron</option>
+                <option value="AMD Ryzen 3">AMD Ryzen 3</option>
+                <option value="AMD Ryzen 5">AMD Ryzen 5</option>
+                <option value="AMD Ryzen 7">AMD Ryzen 7</option>
+                <option value="AMD Ryzen 9">AMD Ryzen 9</option>
+                <option value="Apple M1 Series">Apple M3 Series</option>
+                <option value="Apple M2 Series">Apple M2 Series</option>
+                <option value="Apple M3 Series">Apple M1 Series</option>
+            </select>
+
+            <label for="ram">Dung lượng RAM:</label>
+            <select id="ram" name="ram">
+                <option value="4 GB">4 GB</option>
+                <option value="8 GB">8 GB</option>
+                <option value="12 GB">12 GB</option>
+                <option value="16 GB">16 GB</option>
+                <option value="18 GB">18 GB</option>
+                <option value="32 GB">32 GB</option>
+                <option value="36 GB">36 GB</option>
+                <option value="48 GB">48 GB</option>
+                <option value="64 GB">64 GB</option>
+            </select>
+
+            <label for="hard_driver">Ổ cứng:</label>
+            <select id="hard_driver" name="hard_driver">
+                <!-- <option value="">Chọn ổ cứng</option> -->
+                <option value="SSD 128 GB">SSD 128 GB</option>
+                <option value="SSD 256 GB">SSD 256 GB</option>
+                <option value="SSD 512 GB">SSD 512 GB</option>
+                <option value="SSD 2 TB">SSD 1 TB</option>
+                <option value="SSD 1 TB">SSD 2 TB</option>
+            </select>
+
+            <!-- <label for="resolution">Độ phân giải:</label>
+            <select id="resolution" name="resolution">
+                <option value="FHD - Tiêu chuẩn">FHD - Tiêu chuẩn</option>
+                <option value="2K - Vừa">2K - Vừa</option>
+                <option value="3K - Cao">3K - Cao</option>
+                <option value="4K - Rất cao">4K - Rất cao</option>
+                <option value="WXGA - Thấp">WXGA - Thấp</option>
+            </select> -->
+
+            <!-- <label for="scanning_freq">Tần số quét:</label>
+            <select id="scanning_freq" name="scanning_freq"> -->
+                <!-- <option value="Tiêu chuẩn">Tiêu chuẩn</option>
+                <option value="Cao">Cao</option>
+                <option value="Rất cao">Rất cao</option>
+            </select> -->
+
+            <!-- <label for="card_vga">Card đồ họa:</label>
+            <select id="card_vga" name="card_vga">
+                <option value="Không có Card đồ họa chuyên dụng">Không có Card đồ họa rời</option>
+                <option value="Có Card đồ họa chuyên dụng">Có Card đồ họa rời</option>
+            </select> -->
+			<input type="submit" value="Đề xuất sản phẩm">
+        </form>
+    </div>
+</body>
+</html>
+

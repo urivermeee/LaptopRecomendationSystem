@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laptop Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        h1 {
+            text-align: center;
+        }
+    
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+        }
+    
+        .product {
+            width: 30%;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            position: relative;
+
+        }
+        .product h2 {
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        .product img,
+        .popup-2-1 .product-item img  {
+            width: 100%;
+            height: auto;
+
+        }
+    
+        .product-actions {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+    
+        .product-action  {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .product-action:hover {
+            background-color: #0056b3;
+        }
+        
+        .product-index {
+            color: rgb(213, 65, 45);
+        } 
+        .popup-1 {
+            display: none;
+            position: fixed; /* Thay đổi từ 'absolute' sang 'fixed' để popup luôn nằm trên màn hình */
+            top: 50%; /* Di chuyển popup đến giữa màn hình */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%; /* Điều chỉnh độ rộng của popup */
+            max-width: 55%; /* Giới hạn chiều rộng tối đa của popup */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        .popup-3 {
+            display: none;
+            position: fixed;
+            top: 50%; /* Di chuyển popup đến giữa màn hình */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%; /* Điều chỉnh độ rộng của popup */
+            max-width: 70%; /* Giới hạn chiều rộng tối đa của popup */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            background-color: #fff;
+            z-index: 9999;
+        }
+        .overlay-1,
+        .overlay-2,
+        .overlay-2-1,
+        .overlay-2-2,
+        .overlay-3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.555);
+            /* z-index: 9998; Đặt z-index để nằm dưới popup */
+            display: none; /* Ẩn mặc định */
+        }
+        .popup-1 .content-wrapper,
+        .popup-2 .content-wrapper,
+        .popup-2-2 .content-wrapper,
+        .popup-3 .content-wrapper {
+            max-height: 90vh;
+            /* max-width: 70%; */
+            overflow-y: auto;
+            padding: 20px;
+            color: #000;
+            background-color: #fff; 
+        }
+        .popup-1 .close-btn, 
+        .popup-2 .close-btn, 
+        .popup-2-1 .close-btn,
+        .popup-2-2 .close-btn,
+        .popup-3 .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .info_table {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .st-table-container {
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            margin: 10px 0;
+
+        }
+        .st-table-col {
+            flex: 1 1 calc(50% - 1px);
+            margin-right: -1px;
+            padding-right: 1px;
+            box-sizing: border-box;
+        }
+        .st-table-col:last-child {
+            margin-right: 0;
+        }
+        /* .st-table-title {
+        background-color: #f5f5f5;
+        padding: 5px;
+        font-weight: bold;
+        flex: 1 1 100%;
+        } */
+        .st-table {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+        }
+        .st-table td,
+        .st-table th {
+        border: 1px solid #ddd;
+        padding: 5px;
+        text-align: left;
+        width: 25%; /* Chiều rộng cố định cho mỗi cột */
+        }
+        .st-table th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+        }
+        .st-table-title-2 {
+            background-color: #f5f5f5;
+            padding: 5px;
+            font-weight: bold;
+            color: #2e2e2e; 
+        }
+        .st-table-2 {
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+        .st-table-2 td,
+        .st-table-2 th {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: left;
+            width: 25%;
+        }
+        .st-table-2 th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        } 
+        .price-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .price-table th {
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f5f5f5;
+            flex: 1 1 100%;
+            border: 1px solid #ddd;
+        }
+
+        .price-table td {
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        .price-table td.promotion {
+            text-align: left;
+        }
+        .price-table td.icon {
+            text-align: center;
+        }
+        .fa-solid.fa-square-arrow-up-right {
+            font-size: 40px;
+        }
+        .popup-3 h2 {
+            text-align: center;
+            margin-top: 0%;
+            color: blue
+        }
+        .popup-3 img {
+            width: 40%;
+            height: auto;
+            display: block;
+            margin: auto;
+        }
+        .popup-2 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 80%;
+            background-color: white;
+            z-index: 999;
+            overflow: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .add-product-button {
+            cursor: pointer;
+            font-size: 50px;
+            display: flex; /* Sử dụng flexbox */
+            justify-content: center; /* Căn icon theo chiều ngang */
+            align-items: center; /* Căn icon theo chiều dọc */
+            margin: 0;
+        }
+
+        .product-details {
+            width: 50%;
+            float: left;
+        }
+        .popup-2 .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr)); 
+            grid-gap: 10px;
+            width: 100%; 
+        }
+        .popup-2 .main-grid,
+        .popup-2 .add-product {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .popup-2 .main-grid h2,
+        .popup-2 .add-product h2 {
+            text-align: center;
+            word-wrap: break-word;
+        }
+        .popup-2 .main-grid img,
+        .popup-2 .add-product img {
+            width: 100%;
+            height: 80%; 
+            object-position: center bottom;
+        }
+
+        .popup-2-1,
+        .popup-2-2 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%; 
+            height: 80%;
+            background-color: white;
+            z-index: 999;
+            overflow: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .popup-2-1 .content {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr)); /* Chia thành ba cột */
+            grid-gap: 10px;
+            width: 100%; 
+        }
+
+        .popup-2-1 .product-item {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            flex-grow: 1; /* Đảm bảo chiều cao đều nhau */
+            margin-bottom: 10px;
+            cursor: pointer
+        }
+
+        .popup-2-1 .product-item h2 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2; /* Số dòng tối đa */
+            max-height: 3em; /* Chiều cao tối đa cho 2 dòng */
+            word-wrap: break-word;
+            white-space: normal; /* Xuống dòng */
+        }
+        .popup-2 .compare-button {
+            background-color: #007bff; 
+            color: #fff; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px;
+            cursor: pointer; 
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .popup-2 .compare-button:hover {
+            background-color: #063c77; 
+        }
+        .product-info-table {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+        }
+        .product-info-table th {
+        border: 1px solid #ddd;
+        padding: 5px;
+        font-size: 20px;
+        text-align: center;
+        word-wrap: break-word;
+        width: 25%; /* Chiều rộng cố định cho mỗi cột */
+        }
+        .st-table-title,
+        .st-table-title-3 {
+        background-color: #f5f5f5;
+        padding: 5px;
+        font-weight: bold;
+        color: #2e2e2e; 
+        font-size: 25px;
+        flex: 1 1 100%;
+        }
+    </style>
+    
+</head>
+<body>
+<h1>Những sản phẩm sau phù hợp với yêu cầu của bạn:</h1>
+<h3>Yêu cầu của bạn: {{input_info}}</h3>
+<div class="container">
+    {% for laptop in recommended_laptops_list %}
+        {% set parent_loop_index = loop.index %}    
+        <div class="product">
+            <h3 class="product-index">Sản phẩm thứ {{ loop.index }}:</h3>
+            <h2>{{ laptop['product_name'] }}</h2>
+            <img src="{{ laptop['image_url']}}" alt="{{ laptop['product_name'] }}">
+            <div class="product-actions">
+                <div class="product-action" onclick="viewDetails('{{ loop.index }}')">Xem chi tiết</div>
+                <div class="product-action" onclick="compareProduct('{{ loop.index }}')">So sánh sản phẩm</div>
+                <div class="product-action" onclick="findBestPrice('{{ loop.index }}')">Nơi bán có giá tốt</div>
+            </div>
+        </div>
+        <div class="popup-1" id="detail-popup-{{ loop.index }}">
+            <div class="content-wrapper">
+                <div class="content">
+                <div class="close-btn" onclick="closeDetailPopup('#detail-popup-{{ loop.index }}')">&times;</div>
+                <h1>Chi tiết thông tin của sản phẩm <br>
+                     {{laptop['product_name']}}</h1>
+                <div class="info_table" id="table-1">
+                    <div class="st-table-title"><strong>Thông tin hàng hóa</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Part-Number</td>
+                            <td>{{ laptop['product_id'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Thương hiệu</td>
+                            <td>{{ laptop['product_brand'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Xuất xứ</td>
+                            <td>{{ laptop['source'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Thời điểm ra mắt</td>
+                            <td>{{laptop['release_date']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Thời gian bảo hành (tháng)</td>
+                            <td>{{laptop['warranty']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Phân khúc máy tính</td>
+                            <td>{{laptop['categorize_laptop']}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-2">
+                    <div class="st-table-title"><strong>Thiết kế & Trọng lượng</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Kích thước</td>
+                            <td>{{ laptop['product_size'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Trọng lượng</td>
+                            <td>{{ laptop['product_weight'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tản nhiệt</td>
+                            <td>{{ laptop['product_cooling'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Màu sắc</td>
+                            <td>{{laptop['product_color']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Chất liệu</td>
+                            <td>{{laptop['product_material']}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-3">
+                    <div class="st-table-title"><strong>Bộ xử lý</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Hãng CPU</td>
+                            <td>{{ laptop['CPU_brand'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Công nghệ CPU</td>
+                            <td>{{ laptop['CPU_tech']}} {{laptop['CPU_type']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tốc độ CPU</td>
+                            <td>{{ laptop['CPU_speed'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tốc độ CPU tối đa</td>
+                            <td>{{ laptop['CPU_speed_max'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-4">
+                    <div class="st-table-title"><strong>RAM</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Dung lượng RAM</td>
+                            <td>{{ laptop['RAM_capacity'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Loại RAM</td>
+                            <td>{{ laptop['RAM_type']}} {{laptop['CPU_type']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tốc độ RAM</td>
+                            <td>{{ laptop['RAM_speed'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Hỗ trợ RAM tối đa</td>
+                            <td>{{ laptop['RAM_max_support'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-5">
+                    <div class="st-table-title"><strong>Màn hình</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Kích thước màn hình</td>
+                            <td>{{ laptop['screen_size'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Công nghệ màn hình</td>
+                            <td>{{ laptop['screen_tech']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Độ phân giải</td>
+                            <td>{{ laptop['screen_resolution'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tần số quét</td>
+                            <td>{{ laptop['screen_scanning_freq'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tấm nền màn hình</td>
+                            <td>{{ laptop['screen_background_panel'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-6">
+                    <div class="st-table-container">
+                    <div class="st-table-title"><strong>Đồ họa</strong></div>
+                    {% set card_info = laptop['card_type'].split(',') %}
+                    {% if card_info|length > 1 %}
+                      <div class="st-table-col">
+                        <div class="st-table-title-2">{{ card_info[0]}}</div>
+                        <table class="st-table-2">
+                          <tbody>
+                            <tr>
+                              <td>Hãng</td>
+                              <td>{{ laptop['card_brand'].split(',')[0] }}</td>
+                            </tr>
+                            <tr>
+                              <td>Model</td>
+                              <td>{{ laptop['card_model'].split(',')[0] }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="st-table-col">
+                        <div class="st-table-title-2">{{ card_info[1]}}</div>
+                        <table class="st-table-2">
+                          <tbody>
+                            <tr>
+                              <td>Hãng</td>
+                              <td>{{ laptop['card_brand'].split(',')[1] }}</td>
+                            </tr>
+                            <tr>
+                              <td>Model</td>
+                              <td>{{ laptop['card_model'].split(',')[1] }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    {% else %}
+                      <div class="st-table-col">
+                        <div class="st-table-title-2">{{laptop['card_type']}}</div>
+                        <table class="st-table-2">
+                          <tbody>
+                            <tr>
+                              <td>Hãng</td>
+                              <td>{{ laptop['card_brand'] }}</td>
+                            </tr>
+                            <tr>
+                              <td>Model</td>
+                              <td>{{ laptop['card_model'] }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    {% endif %}
+                </div>
+                </div>
+                <div class="info_table" id="table-7">
+                    <div class="st-table-title"><strong>Lưu trữ</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Kiểu ổ cứng</td>
+                            <td>{{ laptop['hard_driver_type'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Loại ổ cứng</td>
+                            <td>{{ laptop['hard_driver_model']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Dung lượng</td>
+                            <td>{{ laptop['hard_driver_memory'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-8">
+                    <div class="st-table-title"><strong>Giao tiếp và Bàn phím</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Cổng giao tiếp</td>
+                            <td>{{ laptop['communication_ports'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Kiểu bàn phím</td>
+                            <td>{{ laptop['keyboard_type']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Bàn phím số</td>
+                            <td>{{ laptop['keyboard_num'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Đèn bàn phím</td>
+                            <td>{{ laptop['keyboard_light'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>TouchPad</td>
+                            <td>{{ laptop['keyboard_touchpad'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-9">
+                    <div class="st-table-title"><strong>Pin và Hệ điều hành</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Dung lượng pin</td>
+                            <td>{{ laptop['baterry_capacity'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Hệ điều hành</td>
+                            <td>{{ laptop['operating_system'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup-2" id="compare-popup-{{ loop.index }}">
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="close-btn" onclick="closeComparePopup('#compare-popup-{{ loop.index }}')">&times;</div>
+                    <h1>So sánh sản phẩm</h1>
+                    <div class="product-grid">
+                        <div class="main-grid">
+                            <h2 id="main-product-name">{{ laptop['product_name'] }}</h2>
+                            <img src="{{ laptop['image_url'] }}" alt="{{ laptop['product_name'] }}">
+                        </div>
+                        <div class="add-product" data-other-laptop-name="{{ other_laptop_name }}">
+                            <h2>Thêm sản phẩm khác</h2>
+                            <div class="add-product-button" onclick="openProductListPopup('{{ loop.index }}')">
+                                <i class="fa-regular fa-square-plus" style="color: #0c6fbb;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="compare-button" onclick="compareProducts('{{ loop.index }}')">So sánh</button>
+            </div>
+        </div>
+
+        <div class="popup-2-1" id="compare-popup-{{ loop.index }}-1">
+            <div class="content-wrapper">
+                <h1 style="text-align: center;">Danh sách sản phẩm</h1>
+                <div class="close-btn" onclick="closeComparePopup1('#compare-popup-{{ loop.index }}-1')">&times;</div>
+                <div class="content">
+                    {% for other_laptop in recommended_laptops_list %}
+                        {% if other_laptop['product_id'] != laptop['product_id'] %}
+                            <div class="productList">
+                            <div class="product-item" onclick="selectProduct('{{parent_loop_index}}', '{{other_laptop.product_name}}', '{{other_laptop.image_url}}')">
+                                <h2>{{ other_laptop['product_name'] }}</h2>
+                                <img src="{{ other_laptop['image_url'] }}" alt="{{ other_laptop['product_name'] }}">
+                            </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="popup-2-2" id="compare-popup-{{ loop.index }}-2">
+                <h1 style="text-align: center;">Thông tin so sánh</h1>
+                <div class="close-btn" onclick="closeComparePopup2('#compare-popup-{{ loop.index }}-2', '{{loop.index}}')">&times;</div>
+                <table class="product-info-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>{{ laptop['product_name'] }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="info_table" id="table-1">
+                    <div class="st-table-title-3"><strong>Thông tin hàng hóa</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Part-Number</td>
+                            <td>{{ laptop['product_id'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Thương hiệu</td>
+                            <td>{{ laptop['product_brand'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Xuất xứ</td>
+                            <td>{{ laptop['source'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Thời điểm ra mắt</td>
+                            <td>{{laptop['release_date']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Thời gian bảo hành (tháng)</td>
+                            <td>{{laptop['warranty']}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-2">
+                    <div class="st-table-title-3"><strong>Thiết kế & Trọng lượng</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Kích thước</td>
+                            <td>{{ laptop['product_size'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Trọng lượng</td>
+                            <td>{{ laptop['product_weight'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tản nhiệt</td>
+                            <td>{{ laptop['product_cooling'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Màu sắc</td>
+                            <td>{{laptop['product_color']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Chất liệu</td>
+                            <td>{{laptop['product_material']}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-3">
+                    <div class="st-table-title-3"><strong>Bộ xử lý</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Hãng CPU</td>
+                            <td>{{ laptop['CPU_brand'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Công nghệ CPU</td>
+                            <td>{{ laptop['CPU_tech']}} {{laptop['CPU_type']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tốc độ CPU</td>
+                            <td>{{ laptop['CPU_speed'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tốc độ CPU tối đa</td>
+                            <td>{{ laptop['CPU_speed_max'] }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-4">
+                    <div class="st-table-title-3"><strong>RAM</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Dung lượng RAM</td>
+                            <td>{{ laptop['RAM_capacity'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Loại RAM</td>
+                            <td>{{ laptop['RAM_type']}} {{laptop['CPU_type']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tốc độ RAM</td>
+                            <td>{{ laptop['RAM_speed'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Hỗ trợ RAM tối đa</td>
+                            <td>{{ laptop['RAM_max_support'] }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-5">
+                    <div class="st-table-title-3"><strong>Màn hình</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Kích thước màn hình</td>
+                            <td>{{ laptop['screen_size'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Công nghệ màn hình</td>
+                            <td>{{ laptop['screen_tech']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Độ phân giải</td>
+                            <td>{{ laptop['screen_resolution'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tần số quét</td>
+                            <td>{{ laptop['screen_scanning_freq'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tấm nền màn hình</td>
+                            <td>{{ laptop['screen_background_panel'] }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-6">
+                    <table class="st-table">
+                        <tbody>
+                            <tr>
+                                <td class="st-table-title-3">Đồ họa</td>
+                            {% set card_info = laptop['card_type'].split(',') %}
+                            {% if card_info|length > 1 %}
+                                <td>{{ card_info[0]}}: {{ laptop['card_brand'].split(',')[0] }} {{ laptop['card_model'].split(',')[0] }} <br>
+                                    {{ card_info[1]}}: {{ laptop['card_brand'].split(',')[1] }} {{ laptop['card_model'].split(',')[1] }}
+                                </td>
+                            {% else %}
+                                <td>{{laptop['card_type']}}: {{ laptop['card_brand'] }} {{ laptop['card_model'] }}</td>
+                            {% endif %}
+                            <td></td>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info_table" id="table-7">
+                    <div class="st-table-title-3"><strong>Lưu trữ</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Kiểu ổ cứng</td>
+                            <td>{{ laptop['hard_driver_type'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Loại ổ cứng</td>
+                            <td>{{ laptop['hard_driver_model']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Dung lượng</td>
+                            <td>{{ laptop['hard_driver_memory'] }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-8">
+                    <div class="st-table-title-3"><strong>Giao tiếp và Bàn phím</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Cổng giao tiếp</td>
+                            <td>{{ laptop['communication_ports'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Kiểu bàn phím</td>
+                            <td>{{ laptop['keyboard_type']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Bàn phím số</td>
+                            <td>{{ laptop['keyboard_num'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Đèn bàn phím</td>
+                            <td>{{ laptop['keyboard_light'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TouchPad</td>
+                            <td>{{ laptop['keyboard_touchpad'] }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-9">
+                    <div class="st-table-title-3"><strong>Pin và Hệ điều hành</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Dung lượng pin</td>
+                            <td>{{ laptop['baterry_capacity'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Hệ điều hành</td>
+                            <td>{{ laptop['operating_system'] }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="info_table" id="table-10">
+                    <div class="st-table-title-3"><strong>Tổng quan</strong></div>
+                    <table class="st-table">
+                    <tbody>
+                        <tr>
+                            <td>Kích thước máy tính</td>
+                            <td>{{ laptop['product_size_bin'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Trọng lượng</td>
+                            <td>{{ laptop['product_weight_bin'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Chất liệu chung</td>
+                            <td>{{ laptop['product_material_type'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>CPU</td>
+                            <td>{{ laptop['CPU_filter'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Chip CPU hỗ trợ</td>
+                            <td>{{ laptop['CPU_chip_type'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Dung lượng RAM</td>
+                            <td>{{ laptop['hard_driver'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tốc độ RAM</td>
+                            <td>{{ laptop['RAM_bus_filtered'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Độ phân giải</td>
+                            <td>{{ laptop['screen_resolution_bin'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Tần số quét</td>
+                            <td>{{ laptop['screen_scanning_freq_bin'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>VGA</td>
+                            <td>{{ laptop['card_num'] }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Đặc điểm</td>
+                            <td>{{ laptop['purpose_of_using_laptop']}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Nhu cầu sử dụng</td>
+                            <td>{{ laptop['categorize_laptop']}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+        </div>
+        
+        <div class="popup-3" id="price-popup-{{ loop.index }}">
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="close-btn" onclick="closePricePopup('#price-popup-{{ loop.index }}')">&times;</div>
+                    <h1>{{ laptop['product_name'] }}</h1>
+                    <img src="{{ laptop['image_url']}}" alt="{{ laptop['product_name'] }}">
+                    {% set original_price_displayed = namespace(value=0) %}
+                    {% for product in sorted_web_products %}
+                        {% if product['product_id'] == laptop['product_id'] and original_price_displayed.value == 0 %}
+                            <h2 class="original_price">Giá gốc: {{ product['original_price'] }}</h2>
+                            {% set original_price_displayed.value = 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Cửa hàng</th>
+                                <th>Giá khuyến mãi</th>
+                                <th>% khuyến mãi</th>
+                                <th>Trả góp</th>
+                                <th>Khuyến mãi đi kèm</th>
+                                <th>Truy cập</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set product_count = namespace(value=0) %}
+                            {% for product in sorted_web_products %}
+                                {% if product['product_id'] == laptop['product_id'] %}
+                                    {% set product_count.value = product_count.value + 1 %}
+                                    <tr>
+                                        <td>{{ product_count.value }}</td>
+                                        <td>{{ product['shop_brand'] }}</td>
+                                        <td>{{ product['discounted_price'] }}</td>
+                                        <td>{{ product['discount_percentage'] }}</td>
+                                        <td>{{ product['installment_payment'] }}</td>
+                                        <td class="promotion">
+                                            {% if product['gift_count'] == 0 %}
+                                                <ul>
+                                                    Không có khuyến mãi đi kèm
+                                                </ul>    
+                                            
+                                            {% else %}
+                                                <ul>
+                                                    {% for key, value in product.items() %}
+                                                        {% if 'promotion' in key and not value is none and not value != value %}
+                                                            <li>{{ value }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </td>
+                                        <td class="icon">
+                                            <a href="{{ product['product_url'] }}" target="_blank">
+                                                <i class="fa-solid fa-square-arrow-up-right"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+</div>
+
+<div class="overlay-1" onclick="closeByClickOverlay1()"></div>
+<div class="overlay-2" onclick="closeByClickOverlay2()"></div>
+<div class="overlay-2-1" onclick="closeByClickOverlay21()"></div>
+<div class="overlay-2-2" onclick="closeByClickOverlay22()"></div>
+<div class="overlay-3" onclick="closeByClickOverlay3()"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function viewDetails(index) {
+        const popupId1 = `#detail-popup-${index}`;
+        const popup1 = document.querySelector(popupId1);
+        popup1.style.display = 'block';
+        const content1 = popup1.querySelector('.content-wrapper');
+        content1.style.display = 'block';
+        const overlay1 = document.querySelector('.overlay-1');
+        overlay1.style.display = 'block';
+        
+    }
+    function closeDetailPopup(popupId1) {
+        const popup1 = document.querySelector(popupId1);
+        const overlay1 = document.querySelector('.overlay-1');
+        popup1.style.display = 'none';
+        overlay1.style.display = 'none';
+    }
+    function closeByClickOverlay1() {
+        const popups1 = document.querySelectorAll('.popup-1');
+        const overlay1 = document.querySelector('.overlay-1');
+        popups1.forEach(popup => {
+            popup.style.display = 'none';
+        });
+        overlay1.style.display = 'none'; // Ẩn overlay khi đóng tất cả popup
+    }
+    
+    function compareProduct(index) {
+        const popupId2 = `#compare-popup-${index}`;
+        const popup2 = document.querySelector(popupId2);
+        popup2.style.display = 'block';
+        const content2 = popup2.querySelector('.content-wrapper');
+        content2.style.display = 'block';
+        const overlay2 = document.querySelector('.overlay-2');
+        overlay2.style.display = 'block';
+        
+    }
+    function closeComparePopup(popupId2) {
+        const popup2 = document.querySelector(popupId2);
+        const overlay2 = document.querySelector('.overlay-2');
+        popup2.style.display = 'none';
+        overlay2.style.display = 'none';
+        const button = popup2.querySelector('.add-product');
+        button.innerHTML = `<h2>Thêm sản phẩm khác</h2>
+                        <div class="add-product-button" onclick="openProductListPopup('${popupId2.split("-").pop()}')">
+                            <i class="fa-regular fa-square-plus" style="color: #0c6fbb;"></i>
+                        </div>`;
+
+    }
+    function closeByClickOverlay2() {
+        const popups2 = document.querySelectorAll('.popup-2');
+        const overlay2 = document.querySelector('.overlay-2');
+        popups2.forEach(popup => {
+            const button = popup.querySelector('.add-product');
+            button.innerHTML = `<h2>Thêm sản phẩm khác</h2>
+                                <div class="add-product-button" onclick="openProductListPopup('${popup.id.split("-").pop()}')">
+                                    <i class="fa-regular fa-square-plus" style="color: #0c6fbb;"></i>
+                                </div>`;
+            popup.style.display = 'none';
+        });
+        overlay2.style.display = 'none'; 
+    }
+    
+    function openProductListPopup(index) {
+        const popupId21 = `#compare-popup-${index}-1`;
+        const popup21 = document.querySelector(popupId21);
+        popup21.style.display = 'block';
+        const overlay21 = document.querySelector('.overlay-2-1');
+        overlay21.style.display = 'block';
+        
+    }
+    function closeComparePopup1(popupId21) {
+        const popup21 = document.querySelector(popupId21);
+        popup21.style.display = 'none';
+        const overlay21 = document.querySelector('.overlay-2-1');
+        overlay21.style.display = 'none';
+    }
+    function closeByClickOverlay21() {
+        const popups21 = document.querySelectorAll('.popup-2-1');
+        const overlay21 = document.querySelector('.overlay-2-1');
+        popups21.forEach(popup => {
+            popup.style.display = 'none';
+        });
+        overlay21.style.display = 'none'; // Ẩn overlay khi đóng tất cả popup
+    }
+    function selectProduct(index, other_laptop_name, image) {
+        const popupId2 = `#compare-popup-${index}`;
+        const popup2 = document.querySelector(popupId2);
+        const button = popup2.querySelector('.add-product');
+
+        // Tạo phần tử h2 cho other_laptop_name
+        const h2 = document.createElement('h2');
+        h2.textContent = other_laptop_name;
+    
+        // Tạo phần tử img cho ảnh
+        const img = document.createElement('img');
+        img.src = image;
+        img.alt = other_laptop_name;
+
+        // Xóa nội dung hiện tại của button
+        button.innerHTML = '';
+        // Thêm h2 và img vào button
+        button.appendChild(h2);
+        button.appendChild(img);
+        const popupId21 = `#compare-popup-${index}-1`;
+        const popup21 = document.querySelector(popupId21);
+        popup21.style.display = 'none';
+        const overlay21 = document.querySelector('.overlay-2-1');
+        overlay21.style.display = 'none';
+    }
+
+    var recommendedLaptopsList = `{{ recommended_laptops_list | tojson | safe }}`; 
+    recommendedLaptopsList = JSON.parse(recommendedLaptopsList.replace(/\\(.)/g, "$1"));
+    // console.log(recommendedLaptopsList)
+    function compareProducts(index) {
+        const popupId2 = `#compare-popup-${index}`;
+        const popup2 = document.querySelector(popupId2);
+        popup2.style.display = 'none';
+        const overlay2 = document.querySelector('.overlay-2');
+        overlay2.style.display = 'none';
+        const popupId22 = `#compare-popup-${index}-2`;
+        const popup22 = document.querySelector(popupId22);
+        popup22.style.display = 'block';
+        const overlay22 = document.querySelector('.overlay-2-2');
+        overlay22.style.display = 'block';
+        const addProductElement = document.querySelector(`#compare-popup-${index} .add-product h2`);
+        const selectedLaptopName = addProductElement.innerText;
+        
+        let other_laptop;
+            for (let i = 0; i < recommendedLaptopsList.length; i++) {
+                // console.log(recommendedLaptopsList.length)
+                if (recommendedLaptopsList[i]['product_name'] == selectedLaptopName) {
+                    other_laptop = recommendedLaptopsList[i];
+                    // console.log(other_laptop)
+                    break;
+                }
+            }
+            // Nếu tìm thấy other_laptop, cập nhật thông tin vào bảng
+            if (other_laptop) {
+                const tableTh = popup22.querySelector('.product-info-table'); // Lấy bảng theo class
+                const headerRow = tableTh.querySelector('thead tr');
+                const thirdHeader = headerRow.getElementsByTagName('th')[2]; // Lấy thẻ thứ ba trong thead
+                // Cập nhật thông tin của other_laptop vào thẻ thứ ba
+                thirdHeader.textContent = other_laptop['product_name'];
+                ////// Bảng 1
+                const table1 = popup22.querySelector('#table-1');
+                const cells1 = table1.querySelectorAll('td');
+                // Cập nhật thông tin của other_laptop vào các ô td tương ứng
+                cells1[2].textContent = other_laptop['product_id']; // Cập nhật thông tin vào ô thứ ba của dòng thứ nhất
+                cells1[5].textContent = other_laptop['product_brand']; // Cập nhật thông tin vào ô thứ ba của dòng thứ hai
+                cells1[8].textContent = other_laptop['source']; // Cập nhật thông tin vào ô thứ ba của dòng thứ ba
+                cells1[11].textContent = other_laptop['release_date']; // Cập nhật thông tin vào ô thứ ba của dòng thứ tư
+                cells1[14].textContent = other_laptop['warranty'];
+                //// Bảng 2
+                const table2 = popup22.querySelector('#table-2');
+                const cells2 = table2.querySelectorAll('td');
+                cells2[2].textContent = other_laptop['product_size']; // Kích thước
+                cells2[5].textContent = other_laptop['product_weight']; // Trọng lượng
+                cells2[8].textContent = other_laptop['product_cooling']; // Tản nhiệt
+                cells2[11].textContent = other_laptop['product_color']; // Màu sắc
+                cells2[14].textContent = other_laptop['product_material'];
+                ///// Bảng 3
+                const table3 = popup22.querySelector('#table-3');
+                const cells3 = table3.querySelectorAll('td');
+                cells3[2].textContent = other_laptop['CPU_brand']; // Hãng CPU
+                cells3[5].textContent = `${other_laptop['CPU_tech']} ${other_laptop['CPU_type']}`; // Công nghệ CPU
+                cells3[8].textContent = other_laptop['CPU_speed']; // Tốc độ CPU
+                cells3[11].textContent = other_laptop['CPU_speed_max'];
+                //// Bảng 4
+                const table4 = popup22.querySelector('#table-4');
+                const cells4 = table4.querySelectorAll('td');
+                cells4[2].textContent = other_laptop['RAM_capacity']; // Dung lượng RAM
+                cells4[5].textContent = `${other_laptop['RAM_type']} ${other_laptop['CPU_type']}`; // Loại RAM
+                cells4[8].textContent = other_laptop['RAM_speed']; // Tốc độ RAM
+                cells4[11].textContent = other_laptop['RAM_max_support'];
+                /// Bảng 5
+                const table5 = popup22.querySelector('#table-5');
+                const cells5 = table5.querySelectorAll('td');
+                cells5[2].textContent = other_laptop['screen_size']; // Kích thước màn hình
+                cells5[5].textContent = other_laptop['screen_tech']; // Công nghệ màn hình
+                cells5[8].textContent = other_laptop['screen_resolution']; // Độ phân giải
+                cells5[11].textContent = other_laptop['screen_scanning_freq']; // Tần số quét
+                cells5[14].textContent = other_laptop['screen_background_panel'];
+                /// Bảng 6
+                const table6 = popup22.querySelector('#table-6');
+                const cardType = other_laptop['card_type'];
+                const cells6 = table6.querySelectorAll('td');
+                let cardInfo = '';
+                if (cardType.includes(',')) {
+                    const cardTypes = cardType.split(',');
+                    const cardBrands = other_laptop['card_brand'].split(',');
+                    const cardModels = other_laptop['card_model'].split(',');
+                    cardInfo += `${cardTypes[0]}: ${cardBrands[0]} ${cardModels[0]} <br>`;
+                    cardInfo += `${cardTypes[1]}: ${cardBrands[1]} ${cardModels[1]}`;
+                } else {
+                    cardInfo += `${cardType}: ${other_laptop['card_brand']} ${other_laptop['card_model']}`;
+                }
+                cells6[2].innerHTML = cardInfo;
+                /// Bảng 7
+                const table7 = popup22.querySelector('#table-7');
+                const cells7 = table7.querySelectorAll('td');
+                cells7[2].textContent = other_laptop['hard_driver_type']; // Kiểu ổ cứng
+                cells7[5].textContent = other_laptop['hard_driver_model']; // Loại ổ cứng
+                cells7[8].textContent = other_laptop['hard_driver_memory']; // Dung lượng
+                /// Bảng 8
+                const table8 = popup22.querySelector('#table-8');
+                const cells8 = table8.querySelectorAll('td');
+                cells8[2].textContent = other_laptop['communication_ports']; // Cổng giao tiếp
+                cells8[5].textContent = other_laptop['keyboard_type']; // Kiểu bàn phím
+                cells8[8].textContent = other_laptop['keyboard_num']; // Bàn phím số
+                cells8[11].textContent = other_laptop['keyboard_light']; // Đèn bàn phím
+                cells8[14].textContent = other_laptop['keyboard_touchpad']; // TouchPad
+                /// Bảng 9
+                const table9 = popup22.querySelector('#table-9');
+                const cells9 = table9.querySelectorAll('td');
+                cells9[2].textContent = other_laptop['baterry_capacity']; // Dung lượng pin
+                cells9[5].textContent = other_laptop['operating_system']; // Hệ điều hành
+                /// Bảng 10
+                const table10 = popup22.querySelector('#table-10');
+                const cells10 = table10.querySelectorAll('td');
+                cells10[2].textContent = other_laptop['product_size_bin']; // Kích thước máy tính
+                cells10[5].textContent = other_laptop['product_weight_bin']; // Trọng lượng
+                cells10[8].textContent = other_laptop['product_material_type']; // Chất liệu chung
+                cells10[11].textContent = other_laptop['CPU_filter']; // CPU
+                cells10[14].textContent = other_laptop['CPU_chip_type'];
+                cells10[17].textContent = other_laptop['hard_driver'];
+                cells10[20].textContent = other_laptop['RAM_bus_filtered']; 
+                cells10[23].textContent = other_laptop['screen_resolution_bin']; // Độ phân giải
+                cells10[26].textContent = other_laptop['screen_scanning_freq_bin']; // Tần số quét
+                cells10[29].textContent = other_laptop['card_num']; // VGA
+                cells10[32].textContent = other_laptop['purpose_of_using_laptop']; 
+                cells10[35].textContent = other_laptop['categorize_laptop']; 
+            }
+        }   
+    function closeComparePopup2(popupId22, index) {
+        const popup22 = document.querySelector(popupId22);
+        popup22.style.display = 'none';
+        const overlay22 = document.querySelector('.overlay-2-2');
+        overlay22.style.display = 'none';
+        const popupId2 = `#compare-popup-${index}`;
+        const popup2 = document.querySelector(popupId2);
+        const button = popup2.querySelector('.add-product');
+        button.innerHTML = `<h2>Thêm sản phẩm khác</h2>
+                            <div class="add-product-button" onclick="openProductListPopup('${popup2.id.split("-").pop()}')">
+                                <i class="fa-regular fa-square-plus" style="color: #0c6fbb;"></i>
+                            </div>`;
+    }
+    function closeByClickOverlay22() {
+        const popups2 = document.querySelectorAll('.popup-2');
+        popups2.forEach(popup2 => {
+            const button = popup2.querySelector('.add-product');
+            button.innerHTML = `<h2>Thêm sản phẩm khác</h2>
+                                <div class="add-product-button" onclick="openProductListPopup('${popup2.id.split("-").pop()}')">
+                                    <i class="fa-regular fa-square-plus" style="color: #0c6fbb;"></i>
+                                </div>`;
+        });
+
+        const popups22 = document.querySelectorAll('.popup-2-2');
+        const overlay22 = document.querySelector('.overlay-2-2');
+        popups22.forEach(popup => {
+            popup.style.display = 'none';
+        });
+        overlay22.style.display = 'none'; // Ẩn overlay khi đóng tất cả popup
+    }
+
+
+    
+    function findBestPrice(index) {
+        const popupId3 = `#price-popup-${index}`;
+        const popup3 = document.querySelector(popupId3);
+        popup3.style.display = 'block';
+        const content3 = popup3.querySelector('.content-wrapper');
+        content3.style.display = 'block';
+        const overlay3 = document.querySelector('.overlay-3');
+        overlay3.style.display = 'block';
+        
+    }
+    function closePricePopup(popupId3) {
+        const popup3 = document.querySelector(popupId3);
+        const overlay3 = document.querySelector('.overlay-3');
+        popup3.style.display = 'none';
+        overlay3.style.display = 'none';
+    }
+    function closeByClickOverlay3() {
+        const popups3 = document.querySelectorAll('.popup-3');
+        const overlay3 = document.querySelector('.overlay-3');
+        popups3.forEach(popup => {
+            popup.style.display = 'none';
+        });
+        overlay3.style.display = 'none'; // Ẩn overlay khi đóng tất cả popup
+    }
+
+    
+</script>
+
+
+</body>
+</html>
+
+
